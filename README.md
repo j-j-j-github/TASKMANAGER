@@ -62,7 +62,6 @@ Use these credentials to log in for the first time:
 *(Or use the Sign-Up link to create a new user)*
 
 ## 📂 Project Structure
-
 TaskManager/
 │
 ├── Controllers/
