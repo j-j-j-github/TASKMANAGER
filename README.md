@@ -65,25 +65,25 @@ Use these credentials to log in for the first time:
 
 TaskManager/
 │
-├── Controllers/                // Handles HTTP requests & business logic
-│   ├── TasksController.cs      // Task CRUD, status updates, assignments
-│   └── AccountController.cs    // Login, Register, Logout, Auth handling
+├── Controllers/
+│   ├── TasksController.cs
+│   └── AccountController.cs
 │
-├── Models/                     // Domain models & EF Core entities
-│   ├── User.cs                 // Application user entity
-│   ├── TaskItem.cs             // Task entity (status, priority, deadline)
-│   └── AppDbContext.cs         // EF Core DbContext
+├── Models/
+│   ├── User.cs
+│   ├── TaskItem.cs
+│   └── AppDbContext.cs
 │
-├── Views/                      // Razor UI layer
-│   ├── Tasks/                  // Dashboard, partials, modals
-│   └── Account/                // Authentication views
+├── Views/
+│   ├── Tasks/
+│   └── Account/
 │
-├── wwwroot/                    // Static assets
+├── wwwroot/
 │   └── js/
-│       └── taskManager.js      // jQuery AJAX logic for async CRUD
+│       └── taskManager.js
 │
-├── Program.cs                  // App bootstrap, DI, middleware pipeline
-└── appsettings.json            // Configuration & database connection
+├── Program.cs
+└── appsettings.json
 
 ## 🤝 Contributing
 
