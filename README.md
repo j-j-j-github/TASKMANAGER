@@ -62,3 +62,39 @@ Use these credentials to log in for the first time:
 *(Or use the Sign-Up link to create a new user)*
 
 ## 📂 Project Structure
+
+TaskManager/
+│
+├── Controllers/                // Handles HTTP requests & business logic
+│   ├── TasksController.cs      // Task CRUD, status updates, assignments
+│   └── AccountController.cs    // Login, Register, Logout, Auth handling
+│
+├── Models/                     // Domain models & EF Core entities
+│   ├── User.cs                 // Application user entity
+│   ├── TaskItem.cs             // Task entity (status, priority, deadline)
+│   └── AppDbContext.cs         // EF Core DbContext
+│
+├── Views/                      // Razor UI layer
+│   ├── Tasks/                  // Dashboard, partials, modals
+│   └── Account/                // Authentication views
+│
+├── wwwroot/                    // Static assets
+│   └── js/
+│       └── taskManager.js      // jQuery AJAX logic for async CRUD
+│
+├── Program.cs                  // App bootstrap, DI, middleware pipeline
+└── appsettings.json            // Configuration & database connection
+
+## 🤝 Contributing
+
+Contributions are welcome! If you'd like to improve the UI or add new features (like Categories or Email Notifications), feel free to fork the repository.
+
+1.  Fork the Project
+2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the Branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
