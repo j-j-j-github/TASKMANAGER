@@ -1,0 +1,4 @@
+*.db
+TaskManager.db-shm
+TaskManager.db-wal
+TaskManager.db
