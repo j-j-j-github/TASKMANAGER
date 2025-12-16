@@ -33,37 +33,43 @@ namespace TaskManagerApp.Controllers
 
         // GET: /Tasks/GetTasks
        [HttpGet]
+
+[HttpGet]
 public async Task<IActionResult> GetTasks(string? term)
 {
-    // 1. Start with "All Tasks"
-    // .Include is important if you want to see the Assigned User's name!
+    // 1. Get Current Logged-in User Info
+    var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+    var roleClaim = User.FindFirst(System.Security.Claims.ClaimTypes.Role);
+
+    int currentUserId = (userIdClaim != null) ? int.Parse(userIdClaim.Value) : 0;
+    bool isAdmin = (roleClaim != null) && roleClaim.Value == "Admin";
+
+    // 2. Query Database
     var query = _context.Tasks.Include(t => t.AssignedUser).AsQueryable();
 
-    // 2. Filter by Search Term (if user typed something)
     if (!string.IsNullOrEmpty(term))
     {
-        // Search in Title OR Description
-        // Force everything to LowerCase so "Task" == "task"
-string lowerTerm = term.ToLower(); 
-
-query = query.Where(t => 
-    t.Title.ToLower().Contains(lowerTerm) || 
-    (t.Description != null && t.Description.ToLower().Contains(lowerTerm))
-);
+        string lowerTerm = term.ToLower();
+        query = query.Where(t => 
+            t.Title.ToLower().Contains(lowerTerm) || 
+            (t.Description != null && t.Description.ToLower().Contains(lowerTerm)) ||
+            (t.AssignedUser != null && t.AssignedUser.FullName.ToLower().Contains(lowerTerm))
+        );
     }
 
-    // 3. Execute Query
+    // 3. Prepare Data (Add "CanManage" flag)
     var tasks = await query.Select(t => new {
         t.TaskID,
         t.Title,
-        t.Priority,
         t.Description,
-        // Format date to look nice (yyyy-MM-dd)
+        t.Priority,
         Deadline = t.Deadline.ToString("yyyy-MM-dd"), 
         t.Status,
         t.AssignedTo,
-        // If AssignedUser is null, send "Unassigned", else send FullName
-        AssignedToName = t.AssignedUser != null ? t.AssignedUser.FullName : "Unassigned"
+        AssignedToName = t.AssignedUser != null ? t.AssignedUser.FullName : "Unassigned",
+        
+        // TRUE if Admin OR if the task belongs to the current user
+        CanManage = isAdmin || (t.AssignedTo == currentUserId) 
     }).ToListAsync();
 
     return Json(tasks);
@@ -71,78 +77,96 @@ query = query.Where(t =>
         // POST: /Tasks/SaveTask (Add or Edit)
         // POST: /Tasks/SaveTask (Add or Edit)
 [HttpPost]
-public async Task<IActionResult> SaveTask([FromBody] TaskItem model)
+public async Task<IActionResult> SaveTask([FromBody] TaskItem task)
 {
-    try
+    if (task.TaskID == 0)
     {
-        Console.WriteLine("--- SAVE TASK STARTED ---"); // Debug Log
-
-        // 1. Validate User Session
-        var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (string.IsNullOrEmpty(userIdString))
-        {
-            return StatusCode(401, "Session Expired. Please Logout and Login again.");
-        }
-        int currentUserId = int.Parse(userIdString);
-
-        // 2. Fix "AssignedTo" (Dropdown sends 0, but DB needs NULL)
-        if (model.AssignedTo == 0) 
-        {
-            model.AssignedTo = null;
-        }
-
-        // 3. Save Logic
-        if (model.TaskID == 0)
-        {
-            // NEW TASK
-            model.CreatedBy = currentUserId;
-            // Ensure we don't accidentally try to insert a whole User object
-            model.AssignedUser = null; 
-            _context.Tasks.Add(model);
-            Console.WriteLine("Adding New Task...");
-        }
-        else
-        {
-            // UPDATE TASK
-            var task = await _context.Tasks.FindAsync(model.TaskID);
-            if (task == null) return NotFound("Task ID not found in database.");
-
-            task.Title = model.Title;
-            task.Description = model.Description;
-            task.Priority = model.Priority;
-            task.Deadline = model.Deadline;
-            task.Status = model.Status;
-            task.AssignedTo = model.AssignedTo;
-            Console.WriteLine("Updating Task ID: " + task.TaskID);
-        }
-
-        await _context.SaveChangesAsync();
-        Console.WriteLine("--- SUCCESS ---");
-        return Json(new { success = true });
+        // CREATE NEW TASK (Anyone can create)
+        _context.Tasks.Add(task);
     }
-    catch (Exception ex)
+    else
     {
-        // THIS PRINTS THE REAL ERROR TO YOUR TERMINAL
-        Console.WriteLine("CRITICAL CRASH: " + ex.Message);
-        if (ex.InnerException != null) 
-            Console.WriteLine("INNER DETAILS: " + ex.InnerException.Message);
+        // UPDATE EXISTING TASK (Security Check Needed!)
+        var existingTask = await _context.Tasks.FindAsync(task.TaskID);
+        if (existingTask == null) return NotFound();
 
-        return StatusCode(500, "Server Error: " + ex.Message);
+        // 1. Get Current User Info
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+        var roleClaim = User.FindFirst(System.Security.Claims.ClaimTypes.Role);
+        
+        if (userIdClaim != null && roleClaim != null)
+        {
+            int currentUserId = int.Parse(userIdClaim.Value);
+            string userRole = roleClaim.Value;
+
+            // 2. Security Check: Block if not Admin AND not Owner
+            // (Note: If assignedTo is null/Unassigned, only Admin can edit it)
+            bool isOwner = existingTask.AssignedTo == currentUserId;
+            
+            if (userRole != "Admin" && !isOwner)
+            {
+                return StatusCode(403, "You can only edit your own tasks!");
+            }
+        }
+
+        // 3. Apply Updates
+        existingTask.Title = task.Title;
+        existingTask.Description = task.Description;
+        existingTask.Priority = task.Priority;
+        existingTask.Deadline = task.Deadline;
+        existingTask.Status = task.Status;
+        existingTask.AssignedTo = task.AssignedTo;
     }
+
+    await _context.SaveChangesAsync();
+    return Ok();
 }
 
         // POST: /Tasks/DeleteTask
         [HttpPost]
-        public async Task<IActionResult> DeleteTask(int id)
-        {
-            var task = await _context.Tasks.FindAsync(id);
-            if (task != null)
-            {
-                _context.Tasks.Remove(task);
-                await _context.SaveChangesAsync();
-                return Json(new { success = true });
-            }
-            return Json(new { success = false });
-        }
+public async Task<IActionResult> DeleteTask(int id)
+{
+    var task = await _context.Tasks.FindAsync(id);
+    if (task == null) return NotFound();
+
+    // 1. Get the Current User's Info from the Cookie
+    var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+    var roleClaim = User.FindFirst(System.Security.Claims.ClaimTypes.Role);
+
+    // Safety check: If not logged in, kick them out
+    if (userIdClaim == null || roleClaim == null) return Unauthorized();
+
+    int currentUserId = int.Parse(userIdClaim.Value);
+    string userRole = roleClaim.Value;
+
+    // 2. The Security Check
+    // ALLOW if: User is "Admin" OR User is the "Owner" of the task
+    if (userRole == "Admin" || task.AssignedTo == currentUserId)
+    {
+        _context.Tasks.Remove(task);
+        await _context.SaveChangesAsync();
+        return Ok();
+    }
+
+    // 3. Otherwise, BLOCK THEM
+    return StatusCode(403, "You are not authorized to delete this task.");
+}
+[HttpGet]
+public async Task<IActionResult> GetTaskStats()
+{
+    var stats = await _context.Tasks
+        // 1. Exclude Completed tasks (Show only active workload)
+        .Where(t => t.Status != "Completed")
+        // 2. Group by the User's Name
+        .GroupBy(t => t.AssignedUser != null ? t.AssignedUser.FullName : "Unassigned")
+        // 3. Count them
+        .Select(g => new { 
+            Name = g.Key, 
+            Count = g.Count() 
+        })
+        .ToListAsync();
+
+    return Json(stats);
+}
     }
 }

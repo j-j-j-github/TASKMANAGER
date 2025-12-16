@@ -1,5 +1,6 @@
 @{
     ViewData["Title"] = "Dashboard";
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 }
 
 <div class="row mb-3">
@@ -91,6 +92,18 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="saveTask()">Save Task</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-5 mb-4">
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 text-center">Active Workload Distribution</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="taskChart"></canvas>
             </div>
         </div>
     </div>
