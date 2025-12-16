@@ -1,0 +1,38 @@
+@model TaskManagerApp.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container mt-5" style="max-width: 400px;">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+            <h3>Login</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Login" method="post">
+                
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label>Email Address</label>
+                    <input asp-for="Email" class="form-control" placeholder="admin@domain.com" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label>Password</label>
+                    <input asp-for="Password" class="form-control" placeholder="123" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Sign In</button>
+            </form>
+        </div>
+        <div class="card-footer text-center text-muted"></div>
+    <small>Default: admin@domain.com / 123</small>
+    <br>
+    <a href="/Account/Register" class="btn btn-link">Create a new account</a>
+</div>
+    </div>
+</div>
