@@ -223,4 +223,5 @@
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/TASKMANAGER.pdb
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/TASKMANAGER.genruntimeconfig.cache
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/ref/TASKMANAGER.dll
-/Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/c233xal6g9-{0}-wrjsnrrgp5-wrjsnrrgp5.gz
+/Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/TASKMANAGER.sourcelink.json
+/Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/c233xal6g9-{0}-ouqwkplo5f-ouqwkplo5f.gz

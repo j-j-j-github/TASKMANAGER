@@ -1,26 +1,24 @@
-// wwwroot/js/taskManager.js
-
 $(document).ready(function () {
     loadTasks();
     $('#searchInput').on('input', function() {
-        loadTasks(); // Reload table every time you type
+        loadTasks(); 
     });
 });
 
 function loadTasks() {
-    // 1. Get the current text from the search box
-    let searchTerm = $('#searchInput').val();
+    let searchTerm = $('#searchInput').val() || '';
 
-    // 2. Send it to the server
     $.get('/Tasks/GetTasks?term=' + searchTerm, function (data) {
         let html = '';
         if (data.length === 0) {
             html = '<tr><td colspan="6" class="text-center">No tasks found.</td></tr>';
         } else {
             data.forEach(t => {
-                // Color code the priority
                 let badgeColor = t.priority === 'High' ? 'bg-danger' : 
                                  t.priority === 'Medium' ? 'bg-warning text-dark' : 'bg-success';
+
+                // SAFETY FIX: Escape single quotes so descriptions like "User's Task" don't break the button
+                let taskString = JSON.stringify(t).replace(/'/g, "&#39;");
 
                 html += `
                     <tr>
@@ -30,7 +28,7 @@ function loadTasks() {
                         <td>${t.deadline}</td>
                         <td>${t.status}</td>
                         <td>
-                            <button class="btn btn-sm btn-info" onclick='editTask(${JSON.stringify(t)})'>Edit</button>
+                            <button class="btn btn-sm btn-info" onclick='editTask(${taskString})'>Edit</button>
                             <button class="btn btn-sm btn-danger" onclick="deleteTask(${t.taskID})">Delete</button>
                         </td>
                     </tr>`;
@@ -41,26 +39,28 @@ function loadTasks() {
 }
 
 function openModal() {
-    // Reset form for a New Task
     $('#taskId').val(0);
     $('#taskTitle').val('');
-    $('#taskDeadline').val('');
+    $('#taskDesc').val(''); 
     $('#taskPriority').val('Medium');
+    $('#taskDeadline').val('');
     $('#taskStatus').val('Pending');
-    $('#taskAssignedTo').val(0); // Default to Unassigned
+    $('#taskAssignedTo').val(0);
     
     new bootstrap.Modal(document.getElementById('taskModal')).show();
 }
 
 function editTask(task) {
-    // Fill the form with existing data
     $('#taskId').val(task.taskID);
     $('#taskTitle').val(task.title);
+    
+    // Fix: Handle lowercase 'description' or uppercase 'Description'
+    let desc = task.description || task.Description || ''; 
+    $('#taskDesc').val(desc);
+
     $('#taskPriority').val(task.priority);
     $('#taskDeadline').val(task.deadline);
     $('#taskStatus').val(task.status);
-    
-    // Select the correct user in the dropdown (or 0 if null)
     $('#taskAssignedTo').val(task.assignedTo || 0);
 
     new bootstrap.Modal(document.getElementById('taskModal')).show();
@@ -70,10 +70,11 @@ function saveTask() {
     // 1. Get Values
     let id = $('#taskId').val();
     let title = $('#taskTitle').val();
+    let desc = $('#taskDesc').val();
     let priority = $('#taskPriority').val();
     let deadline = $('#taskDeadline').val();
     let status = $('#taskStatus').val();
-    let assignedTo = $('#taskAssignedTo').val();
+    let assignedToVal = $('#taskAssignedTo').val(); 
 
     // 2. Validate
     if (!title || !deadline) {
@@ -81,14 +82,17 @@ function saveTask() {
         return;
     }
 
-    // 3. Create Object
+    // 3. FIX: If value is "0" (Unassigned), send null. Else send the number.
+    let finalAssignedTo = (assignedToVal === "0") ? null : parseInt(assignedToVal);
+
     let taskData = {
         TaskID: id,
         Title: title,
+        Description: desc, 
         Priority: priority,
         Deadline: deadline,
         Status: status,
-        AssignedTo: parseInt(assignedTo) // Convert "5" to number 5
+        AssignedTo: finalAssignedTo // <--- Uses the safe variable
     };
 
     // 4. Send to Server

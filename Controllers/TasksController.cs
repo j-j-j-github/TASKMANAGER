@@ -57,6 +57,7 @@ query = query.Where(t =>
         t.TaskID,
         t.Title,
         t.Priority,
+        t.Description,
         // Format date to look nice (yyyy-MM-dd)
         Deadline = t.Deadline.ToString("yyyy-MM-dd"), 
         t.Status,
@@ -107,6 +108,7 @@ public async Task<IActionResult> SaveTask([FromBody] TaskItem model)
             if (task == null) return NotFound("Task ID not found in database.");
 
             task.Title = model.Title;
+            task.Description = model.Description;
             task.Priority = model.Priority;
             task.Deadline = model.Deadline;
             task.Status = model.Status;
