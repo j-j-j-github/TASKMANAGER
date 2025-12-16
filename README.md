@@ -61,29 +61,6 @@ Use these credentials to log in for the first time:
 * **Password:** `123`
 *(Or use the Sign-Up link to create a new user)*
 
-## 📂 Project Structure
-TaskManager/
-│
-├── Controllers/
-│   ├── TasksController.cs
-│   └── AccountController.cs
-│
-├── Models/
-│   ├── User.cs
-│   ├── TaskItem.cs
-│   └── AppDbContext.cs
-│
-├── Views/
-│   ├── Tasks/
-│   └── Account/
-│
-├── wwwroot/
-│   └── js/
-│       └── taskManager.js
-│
-├── Program.cs
-└── appsettings.json
-
 ## 🤝 Contributing
 
 Contributions are welcome! If you'd like to improve the UI or add new features (like Categories or Email Notifications), feel free to fork the repository.
