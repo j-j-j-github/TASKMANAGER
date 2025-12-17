@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Login";
 }
-
 <div class="container mt-5" style="max-width: 400px;">
     <div class="card shadow">
         <div class="card-header bg-primary text-white text-center">
@@ -16,7 +15,7 @@
 
                 <div class="mb-3">
                     <label>Email Address</label>
-                    <input asp-for="Email" class="form-control" placeholder="admin@domain.com" />
+                    <input asp-for="Email" class="form-control" placeholder="john@domain.com" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
 
@@ -29,8 +28,8 @@
                 <button type="submit" class="btn btn-primary w-100">Sign In</button>
             </form>
         </div>
-        <div class="card-footer text-center text-muted"></div>
-    <small>Default: admin@domain.com / 123</small>
+        <div class="card-footer text-center text-muted">
+    <small>Default: john@domain.com / 123</small></div>
     <br>
     <a href="/Account/Register" class="btn btn-link">Create a new account</a>
 </div>
