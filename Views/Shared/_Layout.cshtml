@@ -4,12 +4,34 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Task Manager</title>
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <style>
+        /* Simplified CSS to avoid Razor Parser Errors */
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .dropdown-header {
+            background-color: #f8f9fa;
+            font-weight: 700;
+            color: #495057;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .dropdown-item:hover {
+            background-color: #f1f3f5;
+        }
+    </style>
 </head>
 <body class="bg-light">
     
@@ -18,17 +40,47 @@
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">TMT - Task Manager Team</a>
                 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="navbar-collapse collapse">
                     <ul class="navbar-nav flex-grow-1">
                         </ul>
                     
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <span class="navbar-text text-white me-3">
-                            Hello, @User.Identity.Name
-                        </span>
-                        <a href="/Account/Logout" class="btn btn-outline-danger btn-sm">Logout</a>
-                    }
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        
+                        <li class="nav-item dropdown me-3">
+                            <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-bell" style="font-size: 1.3rem; color: rgba(255,255,255,0.8);"></i>
+                                
+                                <span id="notificationBadge" class="position-absolute badge rounded-pill bg-danger shadow-sm border border-light" 
+                                      style="display:none; top: 5px; right: -2px; font-size: 0.65rem; padding: 0.25em 0.5em;">
+                                    0
+                                </span>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="notificationDropdown" id="notificationList" style="width: 320px; max-height: 400px; overflow-y: auto;">
+                                <li><h6 class="dropdown-header">📢 Notifications</h6></li>
+                                <li class="text-center p-4 text-muted small">
+                                    <i class="fa-regular fa-circle-check fa-2x mb-2 text-secondary"></i><br>
+                                    All caught up!
+                                </li>
+                            </ul>
+                        </li>
+
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item me-3">
+                                <span class="navbar-text text-white">
+                                    Hello, @User.Identity.Name
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Account/Logout" class="btn btn-outline-danger btn-sm">Logout</a>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>

@@ -46,3 +46,38 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+/* --- NOTIFICATION DROPDOWN STYLING --- */
+
+/* 1. ANIMATION: Slide down and fade in */
+/* Note: We use a single @ here because this is a real CSS file */
+.dropdown-menu.show {
+  animation: slideIn 0.3s ease forwards;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 2. SOLID FEEL: Heavier shadow, rounded corners, no border */
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Soft, deep shadow */
+  border-radius: 12px;
+  padding-bottom: 0;
+  overflow: hidden; /* Keeps the rounded corners clean */
+}
+
+/* 3. HEADER: Nice background for the "Notifications" text */
+.dropdown-header {
+  background-color: #f8f9fa;
+  padding: 10px 15px;
+  font-weight: 700;
+  color: #495057;
+  border-bottom: 1px solid #e9ecef;
+}
+
+/* 4. ITEM HOVER: Soft background change */
+.dropdown-item:hover {
+  background-color: #f1f3f5;
+}

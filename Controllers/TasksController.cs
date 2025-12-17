@@ -18,16 +18,16 @@ namespace TaskManagerApp.Controllers
 
         // GET: /Tasks/Index (The Main Dashboard)
         public IActionResult Index()
-        {
-            // We pass the User's ID and Role to the View so JavaScript can use them
-            ViewBag.CurrentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            ViewBag.UserRole = User.FindFirstValue(ClaimTypes.Role);
-            
-            // We also pass a list of users (for the "Assign To" dropdown)
-            ViewBag.UsersList = _context.Users.Select(u => new { u.UserID, u.FullName }).ToList();
-            
-            return View();
-        }
+{
+    // We pass the User's ID and Role to the View so JavaScript can use them
+    ViewBag.CurrentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+    ViewBag.UserRole = User.FindFirst(ClaimTypes.Role).Value;
+    
+    // CHANGE THIS LINE: Send the full User objects (includes Email)
+    ViewBag.UsersList = _context.Users.ToList(); 
+    
+    return View();
+}
 
         // --- AJAX API (Used by jQuery) ---
 
@@ -67,13 +67,65 @@ public async Task<IActionResult> GetTasks(string? term)
         t.Status,
         t.AssignedTo,
         AssignedToName = t.AssignedUser != null ? t.AssignedUser.FullName : "Unassigned",
-        
+        AssignedToEmail = t.AssignedUser != null ? t.AssignedUser.Email : "",
+
         // TRUE if Admin OR if the task belongs to the current user
         CanManage = isAdmin || (t.AssignedTo == currentUserId) 
     }).ToListAsync();
 
     return Json(tasks);
 }
+
+// --- 1. ADMIN: Get list of ALL overdue tasks ---
+[HttpGet]
+public async Task<IActionResult> GetAdminOverdueTasks()
+{
+    // specific security check: Only Admin can access this
+    var roleClaim = User.FindFirst(System.Security.Claims.ClaimTypes.Role);
+    if (roleClaim == null || roleClaim.Value != "Admin") return Unauthorized();
+
+    var today = DateTime.Today;
+
+    var overdueTasks = await _context.Tasks
+        .Include(t => t.AssignedUser) // We need the user's name
+        .Where(t => t.Status != "Completed" && t.Deadline < today) // "Crossed deadline"
+        .Select(t => new {
+            t.Title,
+            Deadline = t.Deadline.ToString("yyyy-MM-dd"),
+            AssignedToName = t.AssignedUser != null ? t.AssignedUser.FullName : "Unassigned",
+            AssignedToEmail = t.AssignedUser != null ? t.AssignedUser.Email : ""
+        })
+        .ToListAsync();
+
+    return Json(overdueTasks);
+}
+
+// --- 2. NOTIFICATIONS: Get tasks for CURRENT user due today/tomorrow/overdue ---
+[HttpGet]
+public async Task<IActionResult> GetMyNotifications()
+{
+    var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+    if (userIdClaim == null) return Json(new List<object>());
+
+    int userId = int.Parse(userIdClaim.Value);
+    var today = DateTime.Today;
+    var tomorrow = today.AddDays(1);
+
+    var tasks = await _context.Tasks
+        .Where(t => t.AssignedTo == userId && t.Status != "Completed")
+        .Where(t => t.Deadline <= tomorrow) // Due Today, Tomorrow, or Overdue
+        .OrderBy(t => t.Deadline)
+        .Select(t => new {
+            t.Title,
+            Deadline = t.Deadline,
+            IsOverdue = t.Deadline < today,
+            IsDueToday = t.Deadline == today
+        })
+        .ToListAsync();
+
+    return Json(tasks);
+}
+
         // POST: /Tasks/SaveTask (Add or Edit)
         // POST: /Tasks/SaveTask (Add or Edit)
 [HttpPost]
@@ -155,13 +207,13 @@ public async Task<IActionResult> DeleteTask(int id)
 public async Task<IActionResult> GetTaskStats()
 {
     var stats = await _context.Tasks
-        // 1. Exclude Completed tasks (Show only active workload)
         .Where(t => t.Status != "Completed")
-        // 2. Group by the User's Name
-        .GroupBy(t => t.AssignedUser != null ? t.AssignedUser.FullName : "Unassigned")
-        // 3. Count them
+        // Group by Email first to be unique
+        .GroupBy(t => t.AssignedUser != null ? t.AssignedUser.Email : "Unassigned") 
         .Select(g => new { 
-            Name = g.Key, 
+            // We need the Name for the label, take the first one found in the group
+            Name = g.First().AssignedUser != null ? g.First().AssignedUser.FullName : "Unassigned",
+            Email = g.Key, 
             Count = g.Count() 
         })
         .ToListAsync();

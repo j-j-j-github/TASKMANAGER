@@ -148,7 +148,6 @@
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/scopedcss/Views/Shared/_Layout.cshtml.rz.scp.css
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/scopedcss/bundle/TASKMANAGER.styles.css
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/scopedcss/projectbundle/TASKMANAGER.bundle.scp.css
-/Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/n3dp3on089-{0}-lugek5hnai-lugek5hnai.gz
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/fw30g097fn-{0}-61n19gt1b8-61n19gt1b8.gz
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/4jviwsoqn1-{0}-fr7q2aak1r-fr7q2aak1r.gz
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/vyh4ifpxyh-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -210,8 +209,6 @@
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/la7rm6c6vj-{0}-muycvpuwrr-muycvpuwrr.gz
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/bq8r7uvps5-{0}-87fc7y1x7t-87fc7y1x7t.gz
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/3wv67xah70-{0}-jfsiqqwiad-jfsiqqwiad.gz
-/Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/3y6rco41yf-{0}-qnk4kn5p28-qnk4kn5p28.gz
-/Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/wjaoemadd1-{0}-qnk4kn5p28-qnk4kn5p28.gz
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/staticwebassets.build.json
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/staticwebassets.build.json.cache
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/staticwebassets.development.json
@@ -224,4 +221,7 @@
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/TASKMANAGER.genruntimeconfig.cache
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/ref/TASKMANAGER.dll
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/TASKMANAGER.sourcelink.json
-/Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/c233xal6g9-{0}-hsnlhlvhl7-hsnlhlvhl7.gz
+/Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/3y6rco41yf-{0}-4e7m6qqyra-4e7m6qqyra.gz
+/Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/wjaoemadd1-{0}-4e7m6qqyra-4e7m6qqyra.gz
+/Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/n3dp3on089-{0}-98s9gyeenb-98s9gyeenb.gz
+/Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net10.0/compressed/c233xal6g9-{0}-op18ddt66b-op18ddt66b.gz
