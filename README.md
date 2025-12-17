@@ -5,23 +5,38 @@ A full-stack Task Management application built with **ASP.NET Core MVC**. This p
 ![Project Status](https://img.shields.io/badge/status-active-success)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-## ✨ Features
+## ✨ New Features (v2.0)
+
+* **🎨 Visual Identity System:** Users are auto-assigned a unique, permanent color based on their email. This color syncs across the Dashboard, Charts, and Dropdowns.
+* **🔔 Smart Notifications:** Real-time alert bell showing personal deadlines:
+    * ⚠️ **Red:** Overdue tasks.
+    * 📅 **Orange:** Due today.
+    * ⏳ **Blue:** Due tomorrow.
+* **👮 Admin Monitoring:** A special "Critical Attention" panel for Admins to track all overdue tasks across the organization.
+* **🔽 Universal Dropdown:** Integrated **Select2** for a rich, searchable "Assign To" menu that renders consistent custom colors on Windows, Mac, and Mobile.
+* **📊 Advanced Analytics:** Interactive Chart.js integration grouping tasks by unique user emails.
+* **✨ UI Polish:** Smooth CSS animations for menus (slide-in/slide-out) and a modern, shadow-depth design.
+
+## 🛠️ Core Features
 
 * **User Authentication:** Secure Login/Register system using Claims & Cookies.
 * **Task CRUD:** Create, Read, Update, and Delete tasks without page reloads (AJAX).
-* **Assignment System:** Assign tasks to specific users dynamically.
 * **Search & Filter:** Real-time search by Title or Description.
 * **Responsive UI:** Clean interface built with Bootstrap 5.
 * **Database:** SQLite integration via Entity Framework Core (Code-First).
 
-## 🛠️ Tech Stack
+## 🧰 Tech Stack
 
-* **Framework:** ASP.NET Core MVC (.NET 8/10)
+* **Framework:** ASP.NET Core MVC (.NET 8)
 * **Language:** C#
 * **Database:** SQLite
 * **ORM:** Entity Framework Core
 * **Frontend:** HTML5, CSS3, Bootstrap 5
-* **Scripting:** jQuery (AJAX)
+* **Libraries:**
+    * **jQuery** (AJAX interactions)
+    * **Select2** (Rich Dropdowns)
+    * **Chart.js** (Data Visualization)
+    * **FontAwesome** (Icons)
 
 ## 🚀 Getting Started
 
@@ -30,6 +45,7 @@ Follow these instructions to run the project locally.
 ### Prerequisites
 * [.NET SDK](https://dotnet.microsoft.com/download) (Version 6.0 or later)
 * VS Code, Cursor, or Visual Studio
+* *Note: An active internet connection is required for CDNs (FontAwesome, Select2).*
 
 ### Installation
 
