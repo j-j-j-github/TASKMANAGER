@@ -17,6 +17,13 @@ builder.Services.AddAuthentication("CookieAuth")
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+    // This creates the database file if it doesn't exist
+    context.Database.EnsureCreated();
+}
 
 using (var scope = app.Services.CreateScope())
 {
