@@ -20,14 +20,19 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// --- DATABASE CREATION STEP ---
-// We keep this to ensure the file exists, but we removed the user creation part.
+// ==============================================
+// 🚀 AUTOMATIC DATABASE MIGRATION
+// ==============================================
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
-    context.Database.EnsureCreated();
+    
+    // CHANGE: We switched from EnsureCreated() to Migrate()
+    // This allows Azure to update the existing database with your new columns.
+    context.Database.Migrate(); 
 }
+// ==============================================
 
 app.UseStaticFiles();
 app.UseRouting();
