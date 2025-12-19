@@ -5,22 +5,22 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 var builder = WebApplication.CreateBuilder(args);
 
 // ==============================================
-// 🛠️ SMART DATABASE PATH LOGIC (The Fix)
+// 🛠️ SMART DATABASE PATH LOGIC (FIXED)
 // ==============================================
 string dbPath;
 
-// Check if we are running on Azure (The "HOME" variable is always set on Azure)
-var azureHome = Environment.GetEnvironmentVariable("HOME");
+// We check for 'WEBSITE_SITE_NAME', which ONLY exists on Azure App Service.
+var azureSiteName = Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME");
 
-if (!string.IsNullOrEmpty(azureHome))
+if (!string.IsNullOrEmpty(azureSiteName))
 {
-    // ☁️ AZURE MODE: Save in the 'LogFiles' folder (Guaranteed to be writable)
-    // Works for both Windows (D:\home\LogFiles) and Linux (/home/LogFiles)
+    // ☁️ AZURE MODE: Save in 'LogFiles' (Writable)
+    var azureHome = Environment.GetEnvironmentVariable("HOME");
     dbPath = Path.Combine(azureHome, "LogFiles", "TaskManager_v2.db");
 }
 else
 {
-    // 💻 LOCAL MODE: Save in the project folder
+    // 💻 LOCAL MAC/PC MODE: Save in the project folder
     dbPath = Path.Combine(builder.Environment.ContentRootPath, "TaskManager_v2.db");
 }
 
