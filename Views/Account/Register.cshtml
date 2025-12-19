@@ -1,47 +1,206 @@
-@model TaskManagerApp.Models.RegisterViewModel
-
 @{
-    ViewData["Title"] = "Sign Up";
+    ViewData["Title"] = "Register";
+    ViewData["HideNavbar"] = true; // 🔒 Hides the Topbar
 }
 
-<div class="container mt-5" style="max-width: 400px;">
-    <div class="card shadow">
-        <div class="card-header bg-success text-white text-center">
-            <h3>Create Account</h3>
-        </div>
-        <div class="card-body">
-            <form asp-action="Register" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-
-                <div class="mb-3">
-                    <label>Full Name</label>
-                    <input asp-for="FullName" class="form-control" />
-                    <span asp-validation-for="FullName" class="text-danger"></span>
+<div class="container d-flex justify-content-center align-items-center min-vh-100 py-5">
+    <div class="col-md-6 col-lg-5">
+        
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="card-body p-5">
+                
+                <div class="text-center mb-4">
+                    <div class="bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="bi bi-stars fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold mb-1">Get Started with TMT</h4>
+                    <p class="text-muted small">Join your team or create a new workspace.</p>
                 </div>
 
-                <div class="mb-3">
-                    <label>Email Address</label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
+                @if (ViewData["RegisterError"] != null)
+                {
+                    <div class="alert alert-danger d-flex align-items-center rounded-3 mb-4 border-0 shadow-sm">
+                        <i class="bi bi-exclamation-circle-fill me-2"></i>
+                        <div class="small fw-bold">@ViewData["RegisterError"]</div>
+                    </div>
+                }
 
-                <div class="mb-3">
-                    <label>Password</label>
-                    <input asp-for="Password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
+                <form asp-action="Register" method="post">
+                    
+                    <div class="mb-4">
+                        <label class="form-label small text-muted fw-bold d-block text-center">I want to...</label>
+                        
+                        <div class="d-flex gap-2 w-100" role="group">
+                            <input type="radio" class="btn-check" name="UserRole" id="roleAdmin" value="Admin" checked onchange="toggleRole('Admin')">
+                            <label class="btn btn-outline-primary w-50 rounded-pill py-2 fw-bold shadow-sm transition-all" for="roleAdmin">
+                                <i class="bi bi-plus-circle me-1"></i> Create Team
+                            </label>
 
-                <div class="mb-3">
-                    <label>Confirm Password</label>
-                    <input asp-for="ConfirmPassword" class="form-control" />
-                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                </div>
+                            <input type="radio" class="btn-check" name="UserRole" id="roleMember" value="Member" onchange="toggleRole('Member')">
+                            <label class="btn btn-outline-primary w-50 rounded-pill py-2 fw-bold shadow-sm transition-all" for="roleMember">
+                                <i class="bi bi-people me-1"></i> Join Team
+                            </label>
+                        </div>
+                    </div>
 
-                <button type="submit" class="btn btn-success w-100">Register</button>
-            </form>
-        </div>
-        <div class="card-footer text-center">
-            <a href="/Account/Login">Already have an account? Login</a>
+                    <div class="mb-3">
+                        <label class="form-label small text-muted fw-bold">Full Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 rounded-start-3 text-muted"><i class="bi bi-person"></i></span>
+                            <input type="text" name="FullName" class="form-control form-control-lg border-start-0 rounded-end-3 shadow-none" placeholder="John Doe" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small text-muted fw-bold">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 rounded-start-3 text-muted"><i class="bi bi-envelope"></i></span>
+                            <input type="email" name="Email" class="form-control form-control-lg border-start-0 rounded-end-3 shadow-none" placeholder="name@company.com" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small text-muted fw-bold">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 rounded-start-3 text-muted"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="Password" class="form-control form-control-lg border-start-0 rounded-end-3 shadow-none" placeholder="Create a password" required>
+                        </div>
+                    </div>
+
+                    <div id="createTeamSection" class="mb-4">
+                        <label class="form-label small text-muted fw-bold">Team / Project Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 rounded-start-3 text-muted"><i class="bi bi-buildings"></i></span>
+                            <input type="text" id="inputProjectName" name="ProjectName" class="form-control form-control-lg border-start-0 rounded-end-3 shadow-none" placeholder="e.g. Marketing Squad" required>
+                        </div>
+                    </div>
+
+                    <div id="joinTeamSection" class="mb-4" style="display:none;">
+                        <label class="form-label small text-muted fw-bold">Team Invite Code</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 rounded-start-3 text-muted"><i class="bi bi-ticket-perforated"></i></span>
+                            <input type="text" id="inputInviteCode" name="InviteCode" class="form-control form-control-lg border-start-0 rounded-end-3 shadow-none" placeholder="Enter code">
+                        </div>
+                        <div class="form-text text-center mt-2 small">
+                            Ask your admin for the code found on their dashboard.
+                        </div>
+                    </div>
+
+                    <div class="d-grid mb-4">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold shadow-sm hover-scale">
+                            Complete Registration
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <span class="text-muted small">Already have an account?</span>
+                        <a asp-action="Login" class="text-decoration-none fw-bold ms-1">Login here</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="successModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content border-0 shadow-lg rounded-4 text-center p-4">
+            <div class="text-success mb-3">
+                <i class="bi bi-check-circle-fill display-1"></i>
+            </div>
+            <h5 class="fw-bold text-success mb-2">Account Created!</h5>
+            <p class="text-muted small mb-0">Redirecting to login...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleRole(role) {
+        var createSection = document.getElementById('createTeamSection');
+        var joinSection = document.getElementById('joinTeamSection');
+        var inputProjectName = document.getElementById('inputProjectName');
+        var inputInviteCode = document.getElementById('inputInviteCode');
+
+        if (role === 'Admin') {
+            // Show Create Team, Hide Join
+            createSection.style.display = 'block';
+            joinSection.style.display = 'none';
+            
+            // Adjust requirements logic
+            inputProjectName.required = true;
+            inputInviteCode.required = false;
+            inputInviteCode.value = ""; 
+        } else {
+            // Show Join, Hide Create Team
+            createSection.style.display = 'none';
+            joinSection.style.display = 'block';
+            
+            // Adjust requirements logic
+            inputProjectName.required = false;
+            inputInviteCode.required = true;
+            inputProjectName.value = ""; 
+        }
+    }
+
+    // ✅ AUTO REDIRECT LOGIC
+    @if (ViewBag.RegisterSuccess == true)
+    {
+        <text>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. Show the Success Modal
+            var myModal = new bootstrap.Modal(document.getElementById('successModal'));
+            myModal.show();
+
+            // 2. Wait 2.5 seconds, then Redirect
+            setTimeout(function() {
+                window.location.href = '/Account/Login';
+            }, 2500);
+        });
+        </text>
+    }
+</script>
+
+<style>
+    /* Input Focus Styling */
+    .form-control:focus {
+        border-color: #dee2e6;
+        box-shadow: none; 
+    }
+    .input-group:focus-within {
+        box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.15); /* Greenish tint for Register */
+        border-radius: 0.5rem;
+    }
+    .input-group:focus-within .form-control, 
+    .input-group:focus-within .input-group-text {
+        border-color: #86b7fe;
+    }
+    
+    /* Toggle Button Styling */
+    .transition-all {
+        transition: all 0.2s ease-in-out;
+    }
+    
+    .btn-check:checked + .btn-outline-primary {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: white;
+        box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3) !important;
+        transform: translateY(-2px);
+    }
+    
+    .btn-outline-primary {
+        border: 1px solid #dee2e6;
+        color: #6c757d;
+        background-color: #f8f9fa;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: white;
+        border-color: #0d6efd;
+        color: #0d6efd;
+        transform: translateY(-1px);
+    }
+
+    .hover-scale { transition: transform 0.2s; }
+    .hover-scale:hover { transform: scale(1.02); }
+</style>

@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Security.Claims; // Needed for creating the User Identity
-using TaskManagerApp.Models;  // Needed to access User and DbContext
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using TaskManagerApp.Models;
 
 namespace TaskManagerApp.Controllers
 {
@@ -10,24 +10,13 @@ namespace TaskManagerApp.Controllers
     {
         private readonly AppDbContext _context;
 
-        // Constructor: Receives the Database Tool we set up in Program.cs
         public AccountController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Shows the login page
-        public IActionResult Login()
-        {
-            // If already logged in, go to Dashboard
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Tasks");
-            }
-            return View();
-        }
-
         // GET: /Account/Register
+        [HttpGet]
         public IActionResult Register()
         {
             return View();
@@ -35,74 +24,146 @@ namespace TaskManagerApp.Controllers
 
         // POST: /Account/Register
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(string FullName, string Email, string Password, string UserRole, string ProjectName, string InviteCode)
         {
-            if (ModelState.IsValid)
+            // 1. Basic Validation
+            if (string.IsNullOrWhiteSpace(FullName) || string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
             {
-                // 1. Check if email already exists
-                if (_context.Users.Any(u => u.Email == model.Email))
+                ViewData["RegisterError"] = "All fields are required.";
+                return View();
+            }
+
+            // 2. Check if user already exists
+            if (_context.Users.Any(u => u.Email == Email))
+            {
+                ViewData["RegisterError"] = "Email is already in use.";
+                return View();
+            }
+
+            int assignedProjectId = 0;
+            string assignedRole = "User";
+
+            // 3. The Fork in the Road (Create Team vs Join Team)
+            if (UserRole == "Admin")
+            {
+                // --- PATH A: CREATE NEW TEAM ---
+                if (string.IsNullOrWhiteSpace(ProjectName))
                 {
-                    ModelState.AddModelError("", "Email is already taken.");
-                    return View(model);
+                    ViewData["RegisterError"] = "Team Name is required to create a team.";
+                    return View();
                 }
 
-                // 2. Create the new User
-                var newUser = new User
+                var newProject = new Project
                 {
-                    FullName = model.FullName,
-                    Email = model.Email,
-                    PasswordHash = model.Password, // In a real app, we would encrypt this!
-                    Role = "User" // Default role is "User", not "Admin"
+                    Name = ProjectName,
+                    // Generate a simple 6-char code
+                    InviteCode = Guid.NewGuid().ToString().Substring(0, 6).ToUpper()
                 };
 
-                _context.Users.Add(newUser);
+                _context.Projects.Add(newProject);
                 await _context.SaveChangesAsync();
 
-                // 3. Go to Login Page
-                return RedirectToAction("Login");
+                assignedProjectId = newProject.Id;
+                assignedRole = "Admin";
             }
-
-            return View(model);
-        }
-
-        // POST: Handles the submit button
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
+            else
             {
-                // 1. Check Database for User
-                var user = _context.Users.FirstOrDefault(u => u.Email == model.Email && u.PasswordHash == model.Password);
-
-                if (user != null)
+                // --- PATH B: JOIN EXISTING TEAM ---
+                if (string.IsNullOrWhiteSpace(InviteCode))
                 {
-                    // 2. Create the User's ID Badge (Claims)
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, user.Email),
-                        new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
-                        new Claim(ClaimTypes.Role, user.Role)
-                    };
-
-                    // 3. Create Identity & Sign In
-                    var claimsIdentity = new ClaimsIdentity(claims, "CookieAuth");
-                    await HttpContext.SignInAsync("CookieAuth", new ClaimsPrincipal(claimsIdentity));
-
-                    return RedirectToAction("Index", "Tasks");
+                    ViewData["RegisterError"] = "Invite Code is required to join a team.";
+                    return View();
                 }
 
-                // If login fails
-                ModelState.AddModelError("", "Invalid Email or Password");
+                var project = _context.Projects.FirstOrDefault(p => p.InviteCode == InviteCode);
+                if (project == null)
+                {
+                    ViewData["RegisterError"] = "Invalid Invite Code. Please check with your admin.";
+                    return View();
+                }
+
+                assignedProjectId = project.Id;
+                assignedRole = "User";
             }
 
-            return View(model);
+            // 4. Create the User
+            var user = new User
+            {
+                FullName = FullName,
+                Email = Email,
+                PasswordHash = Password, // In production, hash this!
+                Role = assignedRole,
+                ProjectId = assignedProjectId
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            // 5. SUCCESS! 
+            // Do NOT Redirect here. Return the View so the JavaScript Popup can show.
+            ViewBag.RegisterSuccess = true;
+            return View();
         }
 
-        // LOGOUT
+        // GET: /Account/Login
+        [HttpGet]
+        public IActionResult Login()
+        {
+            // If already logged in, go to Dashboard
+            if (User.Identity!.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Tasks");
+            }
+            return View();
+        }
+
+        // POST: /Account/Login
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password)
+        {
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            {
+                ViewData["LoginError"] = "Please enter both email and password.";
+                return View();
+            }
+
+            // 1. Check Database for User
+            var user = _context.Users.FirstOrDefault(u => u.Email == email && u.PasswordHash == password);
+
+            if (user != null)
+            {
+                // 2. Log them in
+                await SignInUser(user);
+                return RedirectToAction("Index", "Tasks");
+            }
+
+            // 3. Login Failed - Send error to View
+            ViewData["LoginError"] = "Invalid Email or Password.";
+            return View();
+        }
+
+        // GET: /Account/Logout
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync("CookieAuth");
             return RedirectToAction("Login");
+        }
+
+        // --- HELPER: LOG USER IN ---
+        private async Task SignInUser(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimTypes.Role, user.Role),
+                new Claim("ProjectId", user.ProjectId.ToString()) 
+            };
+
+            var identity = new ClaimsIdentity(claims, "CookieAuth");
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync("CookieAuth", principal);
         }
     }
 }

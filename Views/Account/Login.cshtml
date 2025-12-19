@@ -1,37 +1,89 @@
-@model TaskManagerApp.Models.LoginViewModel
-
 @{
     ViewData["Title"] = "Login";
+    ViewData["HideNavbar"] = true; // 🔒 Hides the Topbar
 }
-<div class="container mt-5" style="max-width: 400px;">
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white text-center">
-            <h3>Login</h3>
-        </div>
-        <div class="card-body">
-            <form asp-action="Login" method="post">
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-md-5 col-lg-4">
+        
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="card-body p-5">
                 
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-
-                <div class="mb-3">
-                    <label>Email Address</label>
-                    <input asp-for="Email" class="form-control" placeholder="john@domain.com" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                <div class="text-center mb-4">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="bi bi-person-fill fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold mb-1">Welcome Back to TMT</h4>
+                    <p class="text-muted small">Enter your details to access your workspace.</p>
                 </div>
 
-                <div class="mb-3">
-                    <label>Password</label>
-                    <input asp-for="Password" class="form-control" placeholder="123" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
+                <form asp-action="Login" method="post">
+                    
+                    @if (ViewData["LoginError"] != null)
+                    {
+                        <div class="text-danger text-center small mb-3 fw-bold animate-shake">
+                            <i class="bi bi-exclamation-circle-fill me-1"></i> 
+                            @ViewData["LoginError"]
+                        </div>
+                    }
 
-                <button type="submit" class="btn btn-primary w-100">Sign In</button>
-            </form>
+                    <div class="mb-3">
+                        <label class="form-label small text-muted fw-bold">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 rounded-start-3 text-muted"><i class="bi bi-envelope"></i></span>
+                            <input type="email" name="Email" class="form-control form-control-lg border-start-0 rounded-end-3 shadow-none" placeholder="name@company.com" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small text-muted fw-bold">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 rounded-start-3 text-muted"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="Password" class="form-control form-control-lg border-start-0 rounded-end-3 shadow-none" placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mb-4">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold shadow-sm hover-scale">
+                            Sign In
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <span class="text-muted small">Don't have an account?</span>
+                        <a asp-action="Register" class="text-decoration-none fw-bold ms-1">Join TMT</a>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="card-footer text-center text-muted">
-    <small>Default: john@domain.com / 123</small></div>
-    <br>
-    <a href="/Account/Register" class="btn btn-link">Create a new account</a>
-</div>
     </div>
 </div>
+
+<style>
+    /* Input Styling */
+    .form-control:focus {
+        border-color: #dee2e6;
+        box-shadow: none; 
+    }
+    .input-group:focus-within {
+        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+        border-radius: 0.5rem;
+    }
+    .input-group:focus-within .form-control, 
+    .input-group:focus-within .input-group-text {
+        border-color: #86b7fe;
+    }
+    
+    .hover-scale { transition: transform 0.2s; }
+    .hover-scale:hover { transform: scale(1.02); }
+
+    /* Shake Animation for Error */
+    @@keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+        20%, 40%, 60%, 80% { transform: translateX(4px); }
+    }
+    .animate-shake {
+        animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+    }
+</style>
