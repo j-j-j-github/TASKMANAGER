@@ -40,6 +40,13 @@ namespace TaskManagerApp.Controllers
                 return View();
             }
 
+            // 🆕 PASSWORD LENGTH CHECK
+            if (Password.Length < 6)
+            {
+                ViewData["RegisterError"] = "Password must be at least 6 characters.";
+                return View();
+            }
+
             int assignedProjectId = 0;
             string assignedRole = "User";
 
@@ -95,7 +102,8 @@ namespace TaskManagerApp.Controllers
             {
                 FullName = FullName,
                 Email = Email,
-                PasswordHash = passwordHash, // Save the HASH, not the plain text
+                // ✅ FIXED: Using 'PasswordHash' because that is what your model has
+                PasswordHash = passwordHash, 
                 Role = assignedRole,
                 ProjectId = assignedProjectId
             };
@@ -138,6 +146,7 @@ namespace TaskManagerApp.Controllers
             // 2. If user exists, check password using BCrypt.Verify
             if (user != null)
             {
+                // ✅ FIXED: Using 'user.PasswordHash' here too
                 bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
 
                 if (isPasswordValid)
