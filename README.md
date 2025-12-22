@@ -1,15 +1,17 @@
 # 📝 TaskManager - ASP.NET Core MVC
 
-A full-stack Task Management application built with **ASP.NET Core MVC**. This project demonstrates modern web architecture using Entity Framework Core, Claims-based Authentication, and AJAX for a seamless user experience.
+A robust, full-stack Task Management application built with **ASP.NET Core MVC**. This project moves away from static page reloads to a dynamic, single-page-like experience, demonstrating modern web architecture using Entity Framework Core, **Secure BCrypt Authentication**, and AJAX.
 
 ## 💼 Live Site:
 https://taskmanagerteam.azurewebsites.net/
 
 ![Project Status](https://img.shields.io/badge/status-active-success)
 ![License](https://img.shields.io/badge/license-MIT-blue)
+![Security](https://img.shields.io/badge/Security-BCrypt-green)
 
 ## ✨ New Features (v2.0)
 
+* **🔐 Enterprise-Grade Security:** Replaced plain-text storage with **BCrypt hashing and salting** to secure user passwords against database breaches.
 * **🎨 Visual Identity System:** Users are auto-assigned a unique, permanent color based on their email. This color syncs across the Dashboard, Charts, and Dropdowns.
 * **🔔 Smart Notifications:** Real-time alert bell showing personal deadlines:
     * ⚠️ **Red:** Overdue tasks.
@@ -18,11 +20,10 @@ https://taskmanagerteam.azurewebsites.net/
 * **👮 Admin Monitoring:** A special "Critical Attention" panel for Admins to track all overdue tasks across the organization.
 * **🔽 Universal Dropdown:** Integrated **Select2** for a rich, searchable "Assign To" menu that renders consistent custom colors on Windows, Mac, and Mobile.
 * **📊 Advanced Analytics:** Interactive Chart.js integration grouping tasks by unique user emails.
-* **✨ UI Polish:** Smooth CSS animations for menus (slide-in/slide-out) and a modern, shadow-depth design.
 
 ## 🛠️ Core Features
 
-* **User Authentication:** Secure Login/Register system using Claims & Cookies.
+* **User Authentication:** Claims-based RBAC (Role-Based Access Control) with **BCrypt Password Hashing**.
 * **Task CRUD:** Create, Read, Update, and Delete tasks without page reloads (AJAX).
 * **Search & Filter:** Real-time search by Title or Description.
 * **Responsive UI:** Clean interface built with Bootstrap 5.
@@ -34,6 +35,7 @@ https://taskmanagerteam.azurewebsites.net/
 * **Language:** C#
 * **Database:** SQLite
 * **ORM:** Entity Framework Core
+* **Security:** **BCrypt.Net-Next** (Hashing)
 * **Frontend:** HTML5, CSS3, Bootstrap 5
 * **Libraries:**
     * **jQuery** (AJAX interactions)
@@ -46,7 +48,7 @@ https://taskmanagerteam.azurewebsites.net/
 Follow these instructions to run the project locally.
 
 ### Prerequisites
-* [.NET SDK](https://dotnet.microsoft.com/download) (Version 6.0 or later)
+* [.NET SDK](https://dotnet.microsoft.com/download) (Version 8.0 or later)
 * VS Code, Cursor, or Visual Studio
 * *Note: An active internet connection is required for CDNs (FontAwesome, Select2).*
 
@@ -67,18 +69,16 @@ Follow these instructions to run the project locally.
     ```bash
     dotnet run
     ```
-    *The database (`TaskManager.db`) will be automatically created and seeded with a default Admin user upon the first run.*
+    *The database (`TaskManager_v2.db`) will be automatically created.*
 
 4.  **Access the Dashboard**
     Open your browser and navigate to: `http://localhost:5082` (or the port shown in your terminal).
 
 ## 🔑 Default Credentials
 
-Use these credentials to log in for the first time:
+**Note:** Due to the new Security Hashing, previous plain-text accounts (like `123`) will no longer work.
 
-* **Email:** `admin@domain.com`
-* **Password:** `123`
-*(Or use the Sign-Up link to create a new user)*
+Please **Register a New Account** on the login screen to generate a secure hash and access the dashboard.
 
 ## 🤝 Contributing
 
