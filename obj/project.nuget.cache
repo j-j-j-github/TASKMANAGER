@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "2xJef+JV/kU=",
+  "dgSpecHash": "2mK7GUAPI0E=",
   "success": true,
   "projectFilePath": "/Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/TASKMANAGER.csproj",
   "expectedPackageFiles": [
+    "/Users/jeevaljollyjacob/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/Users/jeevaljollyjacob/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/jeevaljollyjacob/.nuget/packages/microsoft.bcl.asyncinterfaces/6.0.0/microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "/Users/jeevaljollyjacob/.nuget/packages/microsoft.codeanalysis.analyzers/3.3.3/microsoft.codeanalysis.analyzers.3.3.3.nupkg.sha512",
@@ -51,9 +52,9 @@
     "/Users/jeevaljollyjacob/.nuget/packages/system.text.encodings.web/8.0.0/system.text.encodings.web.8.0.0.nupkg.sha512",
     "/Users/jeevaljollyjacob/.nuget/packages/system.text.json/8.0.0/system.text.json.8.0.0.nupkg.sha512",
     "/Users/jeevaljollyjacob/.nuget/packages/system.threading.channels/6.0.0/system.threading.channels.6.0.0.nupkg.sha512",
-    "/Users/jeevaljollyjacob/.nuget/packages/microsoft.netcore.app.ref/8.0.22/microsoft.netcore.app.ref.8.0.22.nupkg.sha512",
     "/Users/jeevaljollyjacob/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.22/microsoft.aspnetcore.app.ref.8.0.22.nupkg.sha512",
-    "/Users/jeevaljollyjacob/.nuget/packages/microsoft.netcore.app.host.osx-arm64/8.0.22/microsoft.netcore.app.host.osx-arm64.8.0.22.nupkg.sha512"
+    "/Users/jeevaljollyjacob/.nuget/packages/microsoft.netcore.app.host.osx-arm64/8.0.22/microsoft.netcore.app.host.osx-arm64.8.0.22.nupkg.sha512",
+    "/Users/jeevaljollyjacob/.nuget/packages/microsoft.netcore.app.ref/8.0.22/microsoft.netcore.app.ref.8.0.22.nupkg.sha512"
   ],
   "logs": []
 }

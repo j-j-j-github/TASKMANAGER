@@ -129,3 +129,4 @@
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net8.0/TASKMANAGER.pdb
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net8.0/TASKMANAGER.genruntimeconfig.cache
 /Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/obj/Debug/net8.0/ref/TASKMANAGER.dll
+/Users/jeevaljollyjacob/Documents/GIT/TASKMANAGER/bin/Debug/net8.0/BCrypt.Net-Next.dll

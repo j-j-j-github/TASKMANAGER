@@ -86,12 +86,16 @@ namespace TaskManagerApp.Controllers
                 assignedRole = "User";
             }
 
-            // 4. Create the User
+            // 4. Create the User (WITH HASHING)
+            
+            // 🔒 SECURITY UPGRADE: Hash the password before saving
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(Password);
+
             var user = new User
             {
                 FullName = FullName,
                 Email = Email,
-                PasswordHash = Password, // In production, hash this!
+                PasswordHash = passwordHash, // Save the HASH, not the plain text
                 Role = assignedRole,
                 ProjectId = assignedProjectId
             };
@@ -100,7 +104,6 @@ namespace TaskManagerApp.Controllers
             await _context.SaveChangesAsync();
 
             // 5. SUCCESS! 
-            // Do NOT Redirect here. Return the View so the JavaScript Popup can show.
             ViewBag.RegisterSuccess = true;
             return View();
         }
@@ -127,17 +130,25 @@ namespace TaskManagerApp.Controllers
                 return View();
             }
 
-            // 1. Check Database for User
-            var user = _context.Users.FirstOrDefault(u => u.Email == email && u.PasswordHash == password);
+            // 🔒 SECURITY UPGRADE: Verify Hash
+            
+            // 1. Get user by Email ONLY
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
 
+            // 2. If user exists, check password using BCrypt.Verify
             if (user != null)
             {
-                // 2. Log them in
-                await SignInUser(user);
-                return RedirectToAction("Index", "Tasks");
+                bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+
+                if (isPasswordValid)
+                {
+                    // 3. Log them in
+                    await SignInUser(user);
+                    return RedirectToAction("Index", "Tasks");
+                }
             }
 
-            // 3. Login Failed - Send error to View
+            // 4. Login Failed
             ViewData["LoginError"] = "Invalid Email or Password.";
             return View();
         }
