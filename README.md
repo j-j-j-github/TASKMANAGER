@@ -72,7 +72,7 @@ Follow these instructions to run the project locally.
     *The database (`TaskManager_v2.db`) will be automatically created.*
 
 4.  **Access the Dashboard**
-    Open your browser and navigate to: `http://localhost:5082` (or the port shown in your terminal).
+    Open your browser and navigate to the port shown in your terminal.
 
 ## 🔑 Default Credentials
 
