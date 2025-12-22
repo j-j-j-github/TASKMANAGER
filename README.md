@@ -2,6 +2,9 @@
 
 A full-stack Task Management application built with **ASP.NET Core MVC**. This project demonstrates modern web architecture using Entity Framework Core, Claims-based Authentication, and AJAX for a seamless user experience.
 
+## 💼 Live Site:
+https://taskmanagerteam.azurewebsites.net/
+
 ![Project Status](https://img.shields.io/badge/status-active-success)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
