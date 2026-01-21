@@ -1,206 +1,265 @@
 @{
+    Layout = null;
     ViewData["Title"] = "Register";
-    ViewData["HideNavbar"] = true; // 🔒 Hides the Topbar
 }
 
-<div class="container d-flex justify-content-center align-items-center min-vh-100 py-5">
-    <div class="col-md-6 col-lg-5">
-        
-        <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
-            <div class="card-body p-5">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Task Manager Team</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        body { margin: 0; padding: 0; overflow-x: hidden; font-family: 'Segoe UI', sans-serif; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-control:focus { border-color: #0d6efd; box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1); }
+        .btn-check:checked + .btn-white { background-color: white; color: #0d6efd; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn-white { color: #6c757d; }
+        .hover-scale { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .hover-scale:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+
+        /* 🔥 Feature Cards */
+        .feature-item {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(6px);
+            border-radius: 1rem;
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all .25s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-4px) scale(1.01);
+            background: rgba(255,255,255,0.18);
+        }
+
+        /* 🎯 Perfect Round Icons */
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+        }
+
+        .icon-blue { background: linear-gradient(135deg, #0d6efd, #6ea8fe); }
+        .icon-green { background: linear-gradient(135deg, #198754, #51cf66); }
+        .icon-purple { background: linear-gradient(135deg, #6f42c1, #b197fc); }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100 position-relative">
+
+    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; 
+                background: url('/background.jpg') no-repeat center center; 
+                background-size: cover;">
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65);"></div>
+    </div>
+
+    <header class="bg-white shadow-sm py-3 px-4 d-flex align-items-center justify-content-between z-3">
+        <div class="d-flex align-items-center">
+            <img src="/tmt.jpg" alt="Logo" class="rounded-circle me-3 border shadow-sm" style="width: 40px; height: 40px; object-fit: cover;">
+            <span class="h5 mb-0 fw-bold text-dark tracking-tight">Task Manager Team</span>
+        </div>
+        <a href="/Account/Login" class="btn btn-outline-dark btn-sm rounded-pill px-4 fw-bold">Sign In</a>
+    </header>
+
+    <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
                 
-                <div class="text-center mb-4">
-                    <div class="bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                        <i class="bi bi-stars fs-3"></i>
+                <!-- 🔥 LEFT FEATURE PANEL -->
+                <div class="col-lg-6 text-white pe-lg-5 d-none d-lg-block">
+                    <h1 class="display-4 fw-bold mb-3">Build Faster.<br>Work Smarter.</h1>
+                    <p class="lead mb-4 opacity-75">
+                        TMT helps teams collaborate in real-time, distribute work fairly, and deliver projects without chaos.
+                    </p>
+
+                    <div class="d-flex flex-column gap-3 mt-4">
+
+                        <!-- ✅ Real-time Updates -->
+                        <div class="feature-item hover-scale">
+                            <div class="feature-icon icon-blue">
+                                <i class="bi bi-lightning-charge-fill"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold fs-5">Live Real-time Updates</div>
+                                <div class="small opacity-75">
+                                    Tasks sync instantly across your entire team — no refresh, no delays.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ✅ Team Work Distribution -->
+                        <div class="feature-item hover-scale">
+                            <div class="feature-icon icon-purple">
+                                <i class="bi bi-diagram-3-fill"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold fs-5">Smart Work Distribution</div>
+                                <div class="small opacity-75">
+                                    Assign, balance, and track workload automatically across team members.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ✅ Security -->
+                        <div class="feature-item hover-scale">
+                            <div class="feature-icon icon-green">
+                                <i class="bi bi-shield-lock-fill"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold fs-5">Enterprise-grade Security</div>
+                                <div class="small opacity-75">
+                                    BCrypt encryption and role-based access keep your data safe.
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                    <h4 class="fw-bold mb-1">Get Started with TMT</h4>
-                    <p class="text-muted small">Join your team or create a new workspace.</p>
                 </div>
 
-                @if (ViewData["RegisterError"] != null)
-                {
-                    <div class="alert alert-danger d-flex align-items-center rounded-3 mb-4 border-0 shadow-sm">
-                        <i class="bi bi-exclamation-circle-fill me-2"></i>
-                        <div class="small fw-bold">@ViewData["RegisterError"]</div>
-                    </div>
-                }
+                <!-- 🔐 FORM -->
+                <div class="col-lg-5 col-md-8">
+                    <div class="card glass-card border-0 shadow-lg rounded-4 overflow-hidden">
+                        <div class="card-body p-5">
+                            
+                            <h4 class="fw-bold mb-4 text-center">Create Account</h4>
 
-                <form asp-action="Register" method="post">
-                    
-                    <div class="mb-4">
-                        <label class="form-label small text-muted fw-bold d-block text-center">I want to...</label>
-                        
-                        <div class="d-flex gap-2 w-100" role="group">
-                            <input type="radio" class="btn-check" name="UserRole" id="roleAdmin" value="Admin" checked onchange="toggleRole('Admin')">
-                            <label class="btn btn-outline-primary w-50 rounded-pill py-2 fw-bold shadow-sm transition-all" for="roleAdmin">
-                                <i class="bi bi-plus-circle me-1"></i> Create Team
-                            </label>
+                            @if (ViewData["RegisterError"] != null)
+                            {
+                                <div class="alert alert-danger d-flex align-items-center rounded-3 mb-4 small border-0 bg-danger bg-opacity-10 text-danger fw-bold">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    @ViewData["RegisterError"]
+                                </div>
+                            }
 
-                            <input type="radio" class="btn-check" name="UserRole" id="roleMember" value="Member" onchange="toggleRole('Member')">
-                            <label class="btn btn-outline-primary w-50 rounded-pill py-2 fw-bold shadow-sm transition-all" for="roleMember">
-                                <i class="bi bi-people me-1"></i> Join Team
-                            </label>
+                            <form asp-action="Register" method="post">
+                                <div class="mb-4">
+                                    <div class="d-flex gap-2 w-100 bg-light p-1 rounded-pill" role="group">
+                                        <input type="radio" class="btn-check" name="UserRole" id="roleAdmin" value="Admin" checked onchange="toggleRole('Admin')">
+                                        <label class="btn btn-sm btn-white w-50 rounded-pill border-0 fw-bold transition-all" for="roleAdmin">Create Team</label>
+
+                                        <input type="radio" class="btn-check" name="UserRole" id="roleMember" value="Member" onchange="toggleRole('Member')">
+                                        <label class="btn btn-sm btn-white w-50 rounded-pill border-0 fw-bold transition-all" for="roleMember">Join Team</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="text" name="FullName" class="form-control rounded-3" id="floatingName" placeholder="Name" required>
+                                    <label for="floatingName">Full Name</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="email" name="Email" class="form-control rounded-3" id="floatingEmail" placeholder="Email" required>
+                                    <label for="floatingEmail">Email Address</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="password" name="Password" class="form-control rounded-3" id="floatingPass" placeholder="Password" required>
+                                    <label for="floatingPass">Password</label>
+                                </div>
+
+                                <div id="createTeamSection" class="mb-4">
+                                    <div class="form-floating">
+                                        <input type="text" id="inputProjectName" name="ProjectName" class="form-control rounded-3" placeholder="Team Name" required>
+                                        <label>New Team Name</label>
+                                    </div>
+                                </div>
+
+                                <div id="joinTeamSection" class="mb-4" style="display:none;">
+                                    <div class="form-floating">
+                                        <input type="text" id="inputInviteCode" name="InviteCode" class="form-control rounded-3" placeholder="Code">
+                                        <label>Invite Code</label>
+                                    </div>
+                                    <div class="form-text text-end mt-1 small">Ask your admin for the code.</div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow-sm hover-scale">
+                                    Get Started
+                                </button>
+                            </form>
                         </div>
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label class="form-label small text-muted fw-bold">Full Name</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 rounded-start-3 text-muted"><i class="bi bi-person"></i></span>
-                            <input type="text" name="FullName" class="form-control form-control-lg border-start-0 rounded-end-3 shadow-none" placeholder="John Doe" required>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small text-muted fw-bold">Email Address</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 rounded-start-3 text-muted"><i class="bi bi-envelope"></i></span>
-                            <input type="email" name="Email" class="form-control form-control-lg border-start-0 rounded-end-3 shadow-none" placeholder="name@company.com" required>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small text-muted fw-bold">Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 rounded-start-3 text-muted"><i class="bi bi-lock"></i></span>
-                            <input type="password" name="Password" class="form-control form-control-lg border-start-0 rounded-end-3 shadow-none" placeholder="Create a password" required>
-                        </div>
-                    </div>
-
-                    <div id="createTeamSection" class="mb-4">
-                        <label class="form-label small text-muted fw-bold">Team / Project Name</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 rounded-start-3 text-muted"><i class="bi bi-buildings"></i></span>
-                            <input type="text" id="inputProjectName" name="ProjectName" class="form-control form-control-lg border-start-0 rounded-end-3 shadow-none" placeholder="e.g. Marketing Squad" required>
-                        </div>
-                    </div>
-
-                    <div id="joinTeamSection" class="mb-4" style="display:none;">
-                        <label class="form-label small text-muted fw-bold">Team Invite Code</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 rounded-start-3 text-muted"><i class="bi bi-ticket-perforated"></i></span>
-                            <input type="text" id="inputInviteCode" name="InviteCode" class="form-control form-control-lg border-start-0 rounded-end-3 shadow-none" placeholder="Enter code">
-                        </div>
-                        <div class="form-text text-center mt-2 small">
-                            Ask your admin for the code found on their dashboard.
-                        </div>
-                    </div>
-
-                    <div class="d-grid mb-4">
-                        <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold shadow-sm hover-scale">
-                            Complete Registration
-                        </button>
-                    </div>
-
-                    <div class="text-center">
-                        <span class="text-muted small">Already have an account?</span>
-                        <a asp-action="Login" class="text-decoration-none fw-bold ms-1">Login here</a>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
-</div>
+    </main>
 
-<div class="modal fade" id="successModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content border-0 shadow-lg rounded-4 text-center p-4">
-            <div class="text-success mb-3">
-                <i class="bi bi-check-circle-fill display-1"></i>
-            </div>
-            <h5 class="fw-bold text-success mb-2">Account Created!</h5>
-            <p class="text-muted small mb-0">Redirecting to login...</p>
+    <footer class="bg-white py-3 border-top text-center z-3 mt-auto">
+        <div class="container d-flex justify-content-center align-items-center gap-3">
+            <span class="text-muted small fw-bold">© 2025 By J3 Labs</span>
+            <span class="text-muted small">|</span>
+            <a href="https://www.thej3labs.com" target="_blank" class="btn btn-sm btn-light rounded-pill px-3 text-secondary border fw-bold">
+                <i class="bi bi-headset me-1"></i> Support
+            </a>
         </div>
-    </div>
-</div>
+    </footer>
 
-<script>
-    function toggleRole(role) {
-        var createSection = document.getElementById('createTeamSection');
-        var joinSection = document.getElementById('joinTeamSection');
-        var inputProjectName = document.getElementById('inputProjectName');
-        var inputInviteCode = document.getElementById('inputInviteCode');
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleRole(role) {
+            var createSection = document.getElementById('createTeamSection');
+            var joinSection = document.getElementById('joinTeamSection');
+            var inputProjectName = document.getElementById('inputProjectName');
+            var inputInviteCode = document.getElementById('inputInviteCode');
 
-        if (role === 'Admin') {
-            // Show Create Team, Hide Join
-            createSection.style.display = 'block';
-            joinSection.style.display = 'none';
-            
-            // Adjust requirements logic
-            inputProjectName.required = true;
-            inputInviteCode.required = false;
-            inputInviteCode.value = ""; 
-        } else {
-            // Show Join, Hide Create Team
-            createSection.style.display = 'none';
-            joinSection.style.display = 'block';
-            
-            // Adjust requirements logic
-            inputProjectName.required = false;
-            inputInviteCode.required = true;
-            inputProjectName.value = ""; 
+            if (role === 'Admin') {
+                createSection.style.display = 'block';
+                joinSection.style.display = 'none';
+                inputProjectName.required = true;
+                inputInviteCode.required = false;
+                inputInviteCode.value = ""; 
+            } else {
+                createSection.style.display = 'none';
+                joinSection.style.display = 'block';
+                inputProjectName.required = false;
+                inputInviteCode.required = true;
+                inputProjectName.value = ""; 
+            }
         }
-    }
 
-    // ✅ AUTO REDIRECT LOGIC
-    @if (ViewBag.RegisterSuccess == true)
-    {
-        <text>
-        document.addEventListener("DOMContentLoaded", function() {
-            // 1. Show the Success Modal
-            var myModal = new bootstrap.Modal(document.getElementById('successModal'));
-            myModal.show();
-
-            // 2. Wait 2.5 seconds, then Redirect
-            setTimeout(function() {
-                window.location.href = '/Account/Login';
-            }, 2500);
-        });
-        </text>
-    }
-</script>
-
-<style>
-    /* Input Focus Styling */
-    .form-control:focus {
-        border-color: #dee2e6;
-        box-shadow: none; 
-    }
-    .input-group:focus-within {
-        box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.15); /* Greenish tint for Register */
-        border-radius: 0.5rem;
-    }
-    .input-group:focus-within .form-control, 
-    .input-group:focus-within .input-group-text {
-        border-color: #86b7fe;
-    }
-    
-    /* Toggle Button Styling */
-    .transition-all {
-        transition: all 0.2s ease-in-out;
-    }
-    
-    .btn-check:checked + .btn-outline-primary {
-        background-color: #0d6efd;
-        border-color: #0d6efd;
-        color: white;
-        box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3) !important;
-        transform: translateY(-2px);
-    }
-    
-    .btn-outline-primary {
-        border: 1px solid #dee2e6;
-        color: #6c757d;
-        background-color: #f8f9fa;
-    }
-    
-    .btn-outline-primary:hover {
-        background-color: white;
-        border-color: #0d6efd;
-        color: #0d6efd;
-        transform: translateY(-1px);
-    }
-
-    .hover-scale { transition: transform 0.2s; }
-    .hover-scale:hover { transform: scale(1.02); }
-</style>
+        @if (ViewBag.RegisterSuccess == true)
+        {
+            <text>
+            document.body.insertAdjacentHTML('beforeend', `
+                <div class="modal fade" id="successModal" data-bs-backdrop="static" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered modal-sm">
+                        <div class="modal-content border-0 shadow-lg rounded-4 text-center p-4">
+                            <div class="text-success mb-3"><i class="bi bi-check-circle-fill display-1"></i></div>
+                            <h5 class="fw-bold text-success mb-2">Success!</h5>
+                            <p class="text-muted small mb-0">Setting up your workspace...</p>
+                        </div>
+                    </div>
+                </div>
+            `);
+            
+            document.addEventListener("DOMContentLoaded", function() {
+                var myModal = new bootstrap.Modal(document.getElementById('successModal'));
+                myModal.show();
+                setTimeout(function() { window.location.href = '/Account/Login'; }, 2500);
+            });
+            </text>
+        }
+    </script>
+</body>
+</html>
