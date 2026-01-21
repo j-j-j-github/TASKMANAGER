@@ -19,6 +19,12 @@ namespace TaskManagerApp.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            // 👇 ADDED: Redirect to Dashboard if already logged in
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Tasks");
+            }
+
             return View();
         }
 
@@ -102,7 +108,7 @@ namespace TaskManagerApp.Controllers
             {
                 FullName = FullName,
                 Email = Email,
-                // ✅ FIXED: Using 'PasswordHash' because that is what your model has
+                // Using 'PasswordHash' because that is what your model has
                 PasswordHash = passwordHash, 
                 Role = assignedRole,
                 ProjectId = assignedProjectId
@@ -146,7 +152,7 @@ namespace TaskManagerApp.Controllers
             // 2. If user exists, check password using BCrypt.Verify
             if (user != null)
             {
-                // ✅ FIXED: Using 'user.PasswordHash' here too
+                // Verify hash against the stored PasswordHash
                 bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
 
                 if (isPasswordValid)
@@ -166,6 +172,7 @@ namespace TaskManagerApp.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync("CookieAuth");
+            // Redirect to Login after logout so they can sign in again if needed
             return RedirectToAction("Login");
         }
 
